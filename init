@@ -1,0 +1,82 @@
+#!/bin/sh
+here=~/.vim
+
+# Create backup and swap dirs
+#############################
+
+dir_backup=$here/backup
+echo "Creating [$dir_backup] directory"
+if [ ! -d "$dir_backup" ]; then
+    mkdir $dir_backup
+else
+    echo " - Directory already exists"
+fi
+echo "";
+
+dir_swap=$here/swap
+echo "Creating [$dir_swap] directory"
+if [ ! -d "$dir_swap" ]; then
+    mkdir $dir_swap
+else
+    echo " - Directory already exists"
+fi
+echo ""
+
+# Install vim-pathogen
+######################
+
+echo "Installing vim-pathogen"
+
+dir_al=$here/autoload
+if [ ! -d "$dir_al" ]; then
+    echo " - Creating [$dir_al] directory"
+    mkdir $dir_al
+else
+    echo " - [$dir_al] already exists"
+fi
+
+dir_bundle=$here/bundle
+if [ ! -d "$dir_bundle" ]; then
+    echo " - Creating [$dir_bundle] directory"
+    mkdir $dir_bundle
+else
+    echo " - [$dir_bundle] already exists"
+fi
+
+f_pg=$here/autoload/pathogen.vim
+if [ -f "$f_pg" ]; then
+    echo " - Removing old installation first"
+    rm $f_pg
+fi
+echo -n " - Downloading... "
+curl -# -LSso $f_pg https://tpo.pe/pathogen.vim
+echo "Done!"
+echo ""
+
+# Install .vimrc
+################
+
+echo "Installing .vimrc"
+
+# If ~/.vimrc is a symlink
+vimrc=~/.vimrc
+if [ -h "$vimrc" ]; then
+    echo " - Removing old [$vimrc] link"
+    rm $vimrc
+elif [ -f "$vimrc" ]; then
+    echo " - Moving old [$vimrc] file to a backup"
+    mv $vimrc $dir_backup/.vimrc.`date +%F@%H:%M:%S`
+fi
+echo " - Symlinking [$vimrc]"
+ln -s $here/vimrc ~/.vimrc
+echo ""
+
+# Initialize bundled submodules
+###############################
+
+echo "Initialising bundled submodules"
+git submodule update --init
+echo " - Done!"
+echo ""
+
+echo "All done!"
