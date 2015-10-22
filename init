@@ -53,6 +53,14 @@ curl -# -LSso $f_pg https://tpo.pe/pathogen.vim
 echo "Done!"
 echo ""
 
+# Initialize bundled submodules
+###############################
+
+echo "Initialising bundled submodules"
+git submodule update --init
+echo " - Done!"
+echo ""
+
 # Install .vimrc
 ################
 
@@ -69,14 +77,6 @@ elif [ -f "$vimrc" ]; then
 fi
 echo " - Symlinking [$vimrc]"
 ln -s $here/vimrc ~/.vimrc
-echo ""
-
-# Initialize bundled submodules
-###############################
-
-echo "Initialising bundled submodules"
-git submodule update --init
-echo " - Done!"
 echo ""
 
 echo "All done!"
