@@ -49,7 +49,7 @@ set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 
 " Modeline
-set modelines=1
+set modelines=5
 
 function! AppendModeline()
     let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
