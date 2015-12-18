@@ -14,20 +14,66 @@ colorscheme jelleybeans " xoria256 twilight256
 :filetype plugin indent on
 autocmd Filetype gitcommit setlocal spell textwidth=72
 
-set nowrap " don't wrap lines
-set tabstop=4 " a tab is four spaces
+" === Spaces, Tabs & Indentation ===
+set tabstop=4       " number of visual spaces per tab
+set softtabstop=4   " <BS> removes spaces as if they were tabs
+set expandtab       " tabs are spaces (overloadable per file type later)
+set shiftwidth=4    " number of spaces to use for autoindenting
+set shiftround      " use multiple of shiftwidth when indenting with '<' and '>'
+set copyindent      " copy the previous indentation on autoindenting
+
+" === UI ===
+set number      " always show line numbers
+set cursorline  " highlight current line
+set wildmenu    " visual autocomplete for command menu
+set lazyredraw  " redraw only when we need to
+set showmatch   " highlight matching [{()}]
+set incsearch   " search as characters are entered
+set hlsearch    " highlight matches
+
+" === Other options ===
+set nowrap          " don't wrap lines
 set tags=tags
-set softtabstop=4 " when hitting <BS>, pretend like a tab is removed, even if spaces
-set expandtab " expand tabs by default (overloadable per file type later)
-set shiftwidth=4 " number of spaces to use for autoindenting
-set shiftround " use multiple of shiftwidth when indenting with '<' and '>'
-set copyindent " copy the previous indentation on autoindenting
-set number " always show line numbers
-set ignorecase " ignore case when searching
-set smartcase " ignore case if search pattern is all lowercase
-set autowrite "Save on buffer switch
+set ignorecase      " ignore case when searching
+set smartcase       " ignore case if search pattern is all lowercase
+set autowrite       " Save on buffer switch
 set mouse=a
 set encoding=utf-8 " Necessary to show Unicode glyphs
+
+" === Folding ===
+set foldenable          " enable folding
+set foldmethod=syntax   " fold based on syntax
+set foldlevelstart=10   " open most folds by default
+set foldnestmax=10      " 10 nested fold max
+" space toggles folds
+nnoremap <space> za
+
+" === Leader Shortcuts ===
+let mapleader=","
+" turn off search highlight:
+nnoremap <leader><space> :noh<CR> 
+" edit vimrc/zshrc and source vimrc
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+" SuperSave: save current session
+nnoremap <leader>s :mksession<CR>
+" SilverSearcher: open ag.vim
+nnoremap <leader>a :Ag
+
+" === CtrlP ===
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+
+" === NERDTree ===
+map <C-b> :NERDTreeToggle<CR>
+" Open NERDTree if no file is specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Close VIm if only NERDTree is left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " If you prefer the Omni-Completion tip window to close when a selection is
 " made, these lines close it on movement in insert mode or when leaving
